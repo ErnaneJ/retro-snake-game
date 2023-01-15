@@ -1,3 +1,13 @@
+const canvas = document.getElementById("canvas");
+const canvasContext = canvas.getContext('2d');
+let fpsBase = 10;
+
+const colors = {
+  snake: '#C0F0F4',
+  food: '#f4c0c0',
+  background: '#333333'
+}
+
 class Snake{
   constructor(x, y, size){
     this.x = x;
@@ -51,18 +61,15 @@ class Apple{
         }
       }
 
-      if(!isTouching){
-        break;
-      }
+      this.color = colors.food;
+      this.size = snake.size - 5;
+
+      if(!isTouching)  break;
     }
-    this.color = 'red';
-    this.size = snake.size;
   }
 }
 
-const canvas = document.getElementById("canvas");
-const canvasContext = canvas.getContext('2d');
-const snake = new Snake(20,20,20);
+let snake = new Snake(0, 0, 20);
 let apple = new Apple();
 
 window.onload = () => {
@@ -70,7 +77,8 @@ window.onload = () => {
 }
 
 function gameLoop(){
-  setInterval(show, 1000/10) // here 15 is our fps value
+  clearInterval(window.gameInterval);
+  window.gameInterval = setInterval(show, 1000/fpsBase) // here 15 is our fps value
 }
 
 function show(){
@@ -81,20 +89,31 @@ function show(){
 function update(){
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   snake.move();
-  eatApple();
   checkHitWall();
+  checkHitBody();
+  eatApple();
 }
 
 function checkHitWall(){
   let headTail = snake.tail[snake.tail.length - 1];
-  if(headTail.x == - snake.size){
+  if(headTail.x <= - snake.size){
     headTail.x = canvas.width - snake.size;
-  }else if(headTail.x == canvas.width){
+  }else if(headTail.x >= canvas.width){
     headTail.x = 0;
-  }else if(headTail.y == - snake.size){
+  }else if(headTail.y <= - snake.size){
     headTail.y = canvas.height - snake.size;
-  }else if(headTail.y == canvas.height ){
+  }else if(headTail.y >= canvas.height ){
     headTail.y = 0;
+  }
+}
+
+function checkHitBody(){
+  let headTail = snake.tail[snake.tail.length - 1];
+  let elements = snake.tail.filter(body => body.x === headTail.x && body.y === headTail.y)
+
+  if(elements.length === 2){
+    delete snake;
+    snake = new Snake(0, 0, 20);
   }
 }
 
@@ -103,22 +122,39 @@ function eatApple(){
     snake.tail[snake.tail.length] = {x:apple.x, y:apple.y};
     delete apple;
     apple = new Apple();
+    
+    fpsBase += .5;
+    gameLoop();
   }
 }
 
 function draw(){
-  createRect(0, 0, canvas.width, canvas.height, 'black');
-  createRect(0, 0, canvas.width, canvas.height, 'black');
+  createRect(0, 0, canvas.width, canvas.height, colors.background);
   
   for(var i = 0; i < snake.tail.length; i++){
-    createRect(snake.tail[i].x + 2.5, snake.tail[i].y + 2.5, snake.size - 5, snake.size - 5, 'white');
+    createRect(snake.tail[i].x + 2.5, snake.tail[i].y + 2.5, snake.size - 5, snake.size - 5, colors.snake);
   }
 
-  canvasContext.font = '20px Arial';
-  canvasContext.fillStyle = '#00FF42';
-  canvasContext.fillText('Score: ' + (snake.tail.length - 1), canvas.width - 120, 18);
-  // console.log([apple.x, apple.y, apple.size, apple.size, apple.color])
+  updateInformations();
   createRect(apple.x, apple.y, apple.size, apple.size, apple.color);
+}
+
+function updateInformations(){
+  const currentScore = document.getElementById('current-score');
+  currentScore.innerText = 'Score: ' + (snake.tail.length - 1);
+
+  const speed = document.getElementById('speed');
+  speed.innerText = 'Speed: ' + (fpsBase/10).toFixed(2) + 'x';
+
+  const bestScore = document.getElementById('best-score');
+  const localStorageBestScore = localStorage.getItem('best-score');
+  console.log()
+  if(parseInt(localStorageBestScore) >= (snake.tail.length - 1)){
+    bestScore.innerText = 'Best: ' + localStorageBestScore;
+  }else{
+    bestScore.innerText = 'Best: ' + (snake.tail.length - 1);
+    localStorage.setItem('best-score', (snake.tail.length - 1));
+  }
 }
 
 function createRect(x, y, width, height, color){

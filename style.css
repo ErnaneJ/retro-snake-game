@@ -1,1 +1,73 @@
 *{ padding: 0; margin: 0; box-sizing: border-box;}
+
+:root{
+  --body-color: #E5E5E5;
+  --header-game-color: #FEFEFE;
+  --game-background-color: #333333;
+  --primary-color: #C0F0F4;
+}
+
+body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--body-color);
+}
+
+#container{
+  overflow: hidden;
+  border-radius: .25rem;
+  background-color: var(--game-background-color);
+  padding-bottom: 3rem;
+  box-shadow: 0px 10px 15px -3px rgba(0,0,0,.5);
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  background-color: var(--header-game-color);
+}
+
+.header--title-game{
+  display: flex;
+  gap: .5rem;
+  text-transform: capitalize;
+}
+
+.header--title-game--icon{
+  height: 20px;
+  width: 20px;
+  background-color: black;
+  color: green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header--title-game--name{ }
+
+#game{
+  color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  margin: 0rem 2rem;
+}
+
+.game--info{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 0 1.5rem 0;
+}
+
+#canvas{
+  border: 1px solid var(--primary-color);
+  border-radius: .25rem;
+}

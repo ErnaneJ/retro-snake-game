@@ -8,7 +8,23 @@
   <title>Snake Game</title>
 </head>
   <body>
-      <canvas id="canvas" height="1000" width="1000"></canvas>
+    <section id="container">
+      <div class="header">
+        <div class="header--title-game">
+          <div class="header--title-game--icon">S</div>
+          <div class="header--title-game--name">Retro Snake</div>
+        </div>
+        <!-- <button class="header--reload">Reload</button> -->
+      </div>
+      <div id="game">
+        <div class="game--info">
+          <div id="best-score">Best: 0</div>
+          <div id="current-score">Score: 0</div>
+          <div id="speed">Speed: 1.00x</div>
+        </div>
+        <canvas id="canvas" height="400" width="400"></canvas>
+      </div>
+    </section>
       <script src="index.js"></script>
   </body>
 </html>
