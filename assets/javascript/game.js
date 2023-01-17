@@ -15,20 +15,20 @@ class Game{
   loop(){
     clearInterval(window.gameInterval);
     window.gameInterval = setInterval(( ) => {
-      game.updateBoard();
-      game.drawBoard();
+      this.updateBoard();
+      this.drawBoard();
     }, 1000/this.fps);
   }
 
   drawBoard(){
     this.context.createRect(0, 0, canvas.width, canvas.height, this.colors.background);
   
-    for(var i = 0; i < game.snake.tail.length; i++){
-      this.context.createRect(game.snake.tail[i].x + 2.5, game.snake.tail[i].y + 2.5, game.snake.size - 5, game.snake.size - 5, this.colors.snake);
+    for(var i = 0; i < this.snake.tail.length; i++){
+      this.context.createRect(this.snake.tail[i].x + 2.5, this.snake.tail[i].y + 2.5, this.snake.size - 5, this.snake.size - 5, this.colors.snake);
     }
   
     this.updateInformationsDom();
-    this.context.createRect(game.apple.x, game.apple.y, game.apple.size, game.apple.size, game.apple.color);
+    this.context.createRect(this.apple.x, this.apple.y, this.apple.size, this.apple.size, this.apple.color);
   }
 
   updateBoard(){

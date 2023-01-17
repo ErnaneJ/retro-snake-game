@@ -9,13 +9,31 @@
   <script src="./assets/javascript/snake.js"></script>
   <script src="./assets/javascript/apple.js"></script>
   <script src="./assets/javascript/game.js"></script>
+
+  <script src="./assets/javascript/events.js"></script>
   <title>Snake Game</title>
 </head>
-  <body>
+  <body class="dark">
     <section id="settings">
+      <h3 class="settings-title">Settings:</h3>        
       <div class="options">
-        <input type="checkbox" id="dark-theme"/>
-        Theme Dark
+        <div class="checkbox-container">
+          <input type="checkbox" checked id='dark-theme' />
+          <label for='dark-theme'>Theme Dark</label>
+          <span>Theme Dark</span>
+        </div>
+
+        <div class="checkbox-container">
+          <input type="checkbox" checked id='diesWhenHittingTheWall' />
+          <label for='diesWhenHittingTheWall'>Dies When Hitting The Wall</label>
+          <span>Dies When Hitting The Wall</span>
+        </div>
+
+        <div class="checkbox-container">
+          <input type="checkbox" checked id='diesByHittingHisOwnBody' />
+          <label for='diesByHittingHisOwnBody'>Dies By Hitting His Own Body</label>
+          <span>Dies By Hitting His Own Body</span>
+        </div>
       </div>
     </section>
     <section id="container">
