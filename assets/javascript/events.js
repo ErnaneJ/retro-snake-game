@@ -39,11 +39,17 @@ function toggleDiesByHittingHisOwnBody(game){
   });
 }
 
+function toggleAI(game){
+  document.querySelector('input#AI').addEventListener('change', (e) => {
+    game.ai.active = e.target.checked;
+  });
+}
 
 function loadEvents(game){
   keyboard(game);
   toggleDiesWhenHittingTheWall(game);
   toggleDiesByHittingHisOwnBody(game);
+  toggleAI(game);
   toggleTheme();
 }
 

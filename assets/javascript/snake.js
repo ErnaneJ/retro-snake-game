@@ -6,6 +6,9 @@ class Snake{
     this.tail = [{x:this.x, y:this.y}]
     this.rotateX = 0;
     this.rotateY = 1;
+
+    this.currentPositionX = x;
+    this.currentPositionY = y;
   }
 
   move(){
@@ -34,5 +37,7 @@ class Snake{
 
     this.tail.shift();
     this.tail.push(newRect);
+    this.currentPositionX = newRect.x;
+    this.currentPositionY = newRect.y;
   }
 }

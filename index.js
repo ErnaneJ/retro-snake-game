@@ -7,8 +7,8 @@ CanvasRenderingContext2D.prototype.createRect = function (x, y, width, height, c
 }
 
 function startGame(){
-  const game = new Game(canvas, canvasContext);
-  loadEvents(game);
+  window.snakeGame = new Game(canvas, canvasContext);
+  loadEvents(window.snakeGame);
 }
 
 startGame();
