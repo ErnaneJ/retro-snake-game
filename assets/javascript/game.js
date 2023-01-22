@@ -1,13 +1,18 @@
 class Game{
+  PRIMARY_COLOR_FAMILIES = ["#B4ECED", "#81DDDF", "#46C5CA", "#2AA8B0"];
+  COLORS = { 
+    snake_body: () => this.PRIMARY_COLOR_FAMILIES[Math.floor(Math.random()*this.PRIMARY_COLOR_FAMILIES.length)], 
+    snake_head: "#265B64", apple: '#f4c0c0', background: '#333333' 
+  };
+  
   constructor(canvas){
     this.fps = 10;
-    this.colors = { snake: '#C0F0F4', apple: '#f4c0c0', background: '#333333' }
     this.canvas = canvas;
     this.diesWhenHittingTheWall = true;
     this.diesByHittingHisOwnBody = true;
     this.context = this.canvas.getContext('2d');
     this.snake = new Snake(200, 200, 20);
-    this.apple = new Apple(this.snake, this.colors.apple);
+    this.apple = new Apple(this.snake, this.COLORS.apple);
     this.ai = new ArtificialIntelligence(this);
 
     this.loop();
@@ -23,15 +28,14 @@ class Game{
   }
 
   drawBoard(){
-    this.context.createRect(0, 0, canvas.width, canvas.height, this.colors.background);
-  
+    this.context.createRect(0, 0, canvas.width, canvas.height, this.COLORS.background);
     for(var i = 0; i < this.snake.tail.length; i++){
       if(i === this.snake.tail.length -1){
-        this.snake.tail[i].color = 'red'
-        this.context.createRect(this.snake.tail[i].x + 2.5, this.snake.tail[i].y + 2.5, this.snake.size - 5, this.snake.size - 5, 'red');
+        this.snake.tail[i].color = this.COLORS.snake_head;
+        this.context.createRect(this.snake.tail[i].x + 2.5, this.snake.tail[i].y + 2.5, this.snake.size - 5, this.snake.size - 5, this.COLORS.snake_head);
       }else{
-        this.snake.tail[i].color = this.colors.snake
-        this.context.createRect(this.snake.tail[i].x + 2.5, this.snake.tail[i].y + 2.5, this.snake.size - 5, this.snake.size - 5, this.colors.snake);
+        this.snake.tail[i].color = this.COLORS.snake
+        this.context.createRect(this.snake.tail[i].x + 2.5, this.snake.tail[i].y + 2.5, this.snake.size - 5, this.snake.size - 5, this.COLORS.snake_body());
       }
     }
   
@@ -39,7 +43,7 @@ class Game{
     this.context.createRect(this.apple.x, this.apple.y, this.apple.size, this.apple.size, this.apple.color);
   }
 
-  async updateBoard(){
+  updateBoard(){
     this.context.clearRect(0, 0, canvas.width, canvas.height);
 
     this.ai.play();
@@ -69,9 +73,9 @@ class Game{
 
   eatApple(){
     if(this.snake.tail[this.snake.tail.length - 1].x == this.apple.x && this.snake.tail[this.snake.tail.length - 1].y == this.apple.y){
-      this.snake.tail[this.snake.tail.length] = {x: this.apple.x, y: this.apple.y};
+      this.snake.tail[this.snake.tail.length] = {x: this.apple.x, y: this.apple.y, new: true};
       delete this.apple;
-      this.apple = new Apple(this.snake, this.colors.apple);
+      this.apple = new Apple(this.snake, this.COLORS.apple);
       
       this.fps += .5;
       this.loop();
@@ -96,7 +100,6 @@ class Game{
     }
 
     if(hit && this.diesWhenHittingTheWall){
-      console.log('He died! It hit the wall. :(');
       this.snakeDies();
     }
   }
@@ -107,8 +110,7 @@ class Game{
     let headTail = this.snake.tail[this.snake.tail.length - 1];
     let parts = this.snake.tail.filter(body => body.x === headTail.x && body.y === headTail.y)
   
-    if(parts.length === 2) {
-      console.log('He died! He hit his own body. :(');
+    if(parts.length === 2 && !parts[1]?.new) {
       this.snakeDies();
     }
   }

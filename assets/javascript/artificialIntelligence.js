@@ -1,26 +1,41 @@
 class ArtificialIntelligence{
   constructor(game){
-    this.active = true;
+    this.active = false;
     this.game = game;
+    this.lastPath = null;
   }
 
   play(){
     if(!this.active) return;
 
-    if(this.bestDirection('RIGHT') && this.willNotHitTheBody('RIGHT')){
+    this.decidePath(null);
+  }
+
+  decidePath(priority = false){
+    let possiblePaths = ['RIGHT', 'LEFT', 'UP', 'DOWN'];
+
+    if(this.lastPath === 'UP' || this.lastPath === 'DOWN') possiblePaths = ['RIGHT', 'LEFT', this.lastPath];
+    if(this.lastPath === 'LEFT' || this.lastPath === 'RIGHT') possiblePaths = ['UP', 'DOWN', this.lastPath];
+
+    if(possiblePaths.includes('RIGHT') && ((priority === 'RIGHT') || (this.bestDirection('RIGHT') && this.willNotHitTheBody('RIGHT')))){
+      this.lastPath = 'RIGHT';
       this.game.snake.rotateX = 1;
       this.game.snake.rotateY = 0;
-    }else if(this.bestDirection('DOWN') && this.willNotHitTheBody('DOWN')){
+    }else if(possiblePaths.includes('DOWN') && ((priority === 'DOWN') || (this.bestDirection('DOWN') && this.willNotHitTheBody('DOWN')))){
+      this.lastPath = 'DOWN';
       this.game.snake.rotateX = 0;
       this.game.snake.rotateY = 1;
-    }else if(this.bestDirection('UP') && this.willNotHitTheBody('UP')){
+    }else if(possiblePaths.includes('UP') && ((priority === 'UP') || (this.bestDirection('UP') && this.willNotHitTheBody('UP')))){
+      this.lastPath = 'UP';
       this.game.snake.rotateX = 0;
       this.game.snake.rotateY = -1;
-    }else if(this.bestDirection('LEFT') && this.willNotHitTheBody('LEFT')){
+    }else if(possiblePaths.includes('LEFT') && ((priority === 'LEFT') || (this.bestDirection('LEFT') && this.willNotHitTheBody('LEFT')))){
+      this.lastPath = 'LEFT';
       this.game.snake.rotateX = -1;
       this.game.snake.rotateY = 0;
     }else{
-      console.log("I DON'T KNOW WHERE TO GO")
+      const path = possiblePaths[Math.floor(Math.random()*possiblePaths.length)];
+      this.decidePath(path);
     }
   }
 
@@ -45,8 +60,6 @@ class ArtificialIntelligence{
       return distanceGoingDown > distanceGoingUp && (up >= 0 || !this.game.diesWhenHittingTheWall);
     } else if(direction === 'LEFT'){
       return distanceGoingRight > distanceGoingLeft && (left >= 0 || !this.game.diesWhenHittingTheWall);
-    } else{
-      return false;
     }
   }
 
@@ -67,32 +80,9 @@ class ArtificialIntelligence{
       x = x - this.game.snake.size;
     }
 
-    let  parts = tail.filter(body => body.x === x && body.y === y)
+    let parts = tail.filter(body => (Math.abs(body.x - x) <= 0.75) && (Math.abs(body.y - y) <= 0.75))
 
-    if(direction === 'RIGHT'){
-      x = x + this.game.snake.size * 2;
-    } else if(direction === 'DOWN'){
-      y = y + this.game.snake.size * 2;
-    } else if(direction === 'UP'){
-      y = y - this.game.snake.size * 2;
-    } else if(direction === 'LEFT'){
-      x = x - this.game.snake.size * 2;
-    }
 
-    let parts2 = tail.filter(body => body.x === x && body.y === y)
-
-    if(direction === 'RIGHT'){
-      x = x + this.game.snake.size * 2;
-    } else if(direction === 'DOWN'){
-      y = y + this.game.snake.size * 2;
-    } else if(direction === 'UP'){
-      y = y - this.game.snake.size * 2;
-    } else if(direction === 'LEFT'){
-      x = x - this.game.snake.size * 2;
-    }
-
-    let parts3 = tail.filter(body => body.x === x && body.y === y)
-
-    return parts.length === 0 && parts2.length === 0 && parts3.length === 0;
+    return parts.length === 0;
   }
 }
