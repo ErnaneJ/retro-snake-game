@@ -12,7 +12,7 @@
 
 The objective of the project, in addition to the fun of creating one of the most famous games on the planet, was to exercise the use of the canvas drawing context provided by the HTML context API present in the CANVAS tag. In addition, due to the addition of later features, it was possible to exercise the logic and concept of Object Oriented Programming in vanilla Javascript.
 
-Click [here](https://ernanej.github.io/dev.finance/) to access it
+Click [here](https://ernanej.github.io/retro-snake-game/) to access it
 
 ---
 
