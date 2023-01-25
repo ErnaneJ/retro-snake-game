@@ -113,6 +113,7 @@ body{
   border: 1px dashed var(--border-primary-color);
   border-radius: .25rem;
   margin: 1rem 0 0 1rem;
+  max-width: 510px;
 }
 
 .settings-title{
@@ -174,4 +175,18 @@ input[type=checkbox]:checked + label:after {
 
 label:active:after {
 	width: 25px;
+}
+
+.info-board-status{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 10px 0;
+}
+
+.info-board-status ul{
+  margin-left: 25px;
 }

@@ -8,6 +8,7 @@ class Game{
   constructor(canvas){
     this.fps = 10;
     this.canvas = canvas;
+    this.showBoardGrid = false;
     this.diesWhenHittingTheWall = true;
     this.diesByHittingHisOwnBody = true;
     this.context = this.canvas.getContext('2d');
@@ -29,6 +30,20 @@ class Game{
 
   drawBoard(){
     this.context.createRect(0, 0, canvas.width, canvas.height, this.COLORS.background);
+
+    if(this.showBoardGrid){
+      for (let x = 0; x <= this.canvas.width; x += this.snake.size) {
+        this.context.moveTo(x + this.snake.size, -this.snake.size);
+        this.context.lineTo(x + this.snake.size, this.canvas.height + this.snake.size);
+      }
+  
+      for (let x = 0; x <= this.canvas.height; x += this.snake.size) {
+        this.context.moveTo(-this.snake.size, x + this.snake.size);
+        this.context.lineTo(this.canvas.width + this.snake.size, x + this.snake.size);
+      }
+      this.context.stroke();
+    }
+
     for(var i = 0; i < this.snake.tail.length; i++){
       if(i === this.snake.tail.length -1){
         this.snake.tail[i].color = this.COLORS.snake_head;
@@ -38,9 +53,9 @@ class Game{
         this.context.createRect(this.snake.tail[i].x + 2.5, this.snake.tail[i].y + 2.5, this.snake.size - 5, this.snake.size - 5, this.COLORS.snake_body());
       }
     }
-  
+
     this.updateInformationsDom();
-    this.context.createRect(this.apple.x, this.apple.y, this.apple.size, this.apple.size, this.apple.color);
+    this.context.createRect(this.apple.x + 2.5, this.apple.y + 2.5, this.apple.size, this.apple.size, this.apple.color);
   }
 
   updateBoard(){
@@ -48,6 +63,7 @@ class Game{
 
     this.ai.play();
     this.snake.move(this.fps);
+    this.updateBoardStatus();
     this.checkHitWall();
     this.checkHitBody();
     this.eatApple();
@@ -120,5 +136,31 @@ class Game{
     this.snake = new Snake(200, 200, 20);
     this.fps = 10;
     this.loop();
+  }
+
+  updateBoardStatus(){
+    const boardDiv = document.getElementById("board-status");
+    const lastMove = document.getElementById("last-move");
+    const applePosition = document.getElementById("apple-position");
+    const snakeHeadPosition = document.getElementById("snake-head-position");
+
+    const positionAppleMatrix = {y: this.apple.x / this.snake.size, x: this.apple.y / this.snake.size}
+    const board = this.ai.map;
+
+    board[positionAppleMatrix.x][positionAppleMatrix.y] = "🍎"
+    boardDiv.innerHTML = this.ai.map.map(m => {
+      m = m.map((el) => `
+        <span style="width: 20px; font-size: 15px; height: 20px; display: inline-flex; align-items: center; justify-content: center;">
+          ${el === 1 ? '🟦' : el }
+        </span>
+      `);
+      return `<div style="margin: 0; padding:0;">${m.join(' ')}<div>`
+    }).join('');
+
+    applePosition.innerHTML = `Apple Position:  {x: ${this.apple.y}, y: ${this.apple.x}}`
+    lastMove.innerHTML = `Last Move: ${this.snake.lastPath}`;
+    snakeHeadPosition.innerHTML = `Snake Head Position: {x: ${this.snake.currentPositionX}, y: ${this.snake.currentPositionY}}`
+
+    // clearInterval(window.gameInterval);
   }
 }

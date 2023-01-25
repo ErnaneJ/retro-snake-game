@@ -38,12 +38,30 @@
         </div>
 
         <div class="checkbox-container">
+          <input type="checkbox" id='boardGrid' />
+          <label for='boardGrid'>Show Board Grid</label>
+          <span>Show Board Grid</span>
+        </div>
+
+        <div class="checkbox-container">
           <input type="checkbox" id='AI' />
           <label for='AI'>Decision Script</label>
           <span>Decision Script</span>
         </div>
+
+        <h3 class="settings-title">Board Informations:</h3>
+
+        <div class="info-board-status">
+          <ul>
+            <li id="apple-position"> Apple position:  </li>
+            <li id="snake-head-position">Snake Head Position:</li>
+            <li id="last-move"> last move: </li>
+          </ul>
+          
+          <div id="board-status"></div>
       </div>
     </section>
+    
     <section id="container">
       <div class="header">
         <div class="header--title-game">

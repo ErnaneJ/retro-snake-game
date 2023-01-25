@@ -45,11 +45,18 @@ function toggleAI(game){
   });
 }
 
+function toggleBoardGrid(game){
+  document.querySelector('input#boardGrid').addEventListener('change', (e) => {
+    game.showBoardGrid = e.target.checked;
+  });
+}
+
 function loadEvents(game){
   keyboard(game);
   toggleDiesWhenHittingTheWall(game);
   toggleDiesByHittingHisOwnBody(game);
   toggleAI(game);
+  toggleBoardGrid(game)
   toggleTheme();
 }
 
